@@ -15,10 +15,22 @@ h1 {
 
 .filters {
   display: flex;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: space-between;
   margin: 1rem 0;
   flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.status-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.category-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 button {
@@ -43,7 +55,6 @@ button.active {
 button.clear {
   background-color: #f44336;
   color: white;
-  margin-left: auto;
 }
 
 .stats {

@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import { FaTrash, FaEdit, FaCheck, FaTimes, FaFlag } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaCheck, FaTimes, FaFlag, FaTag } from 'react-icons/fa';
 import './TodoItem.css';
 
-function TodoItem({ todo, toggleComplete, deleteTodo, editTodo, changePriority }) {
+function TodoItem({ todo, toggleComplete, deleteTodo, editTodo, changePriority, changeCategory, categories }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [editPriority, setEditPriority] = useState(todo.priority || 'normale');
+  const [editCategory, setEditCategory] = useState(todo.category || 'Personnel');
 
   const handleEdit = () => {
     setIsEditing(true);
     setEditText(todo.text);
     setEditPriority(todo.priority || 'normale');
+    setEditCategory(todo.category || 'Personnel');
   };
 
   const handleSave = () => {
-    editTodo(todo.id, editText, editPriority);
+    editTodo(todo.id, editText, editPriority, editCategory);
     setIsEditing(false);
   };
 
@@ -22,11 +24,18 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo, changePriority }
     setIsEditing(false);
     setEditText(todo.text);
     setEditPriority(todo.priority || 'normale');
+    setEditCategory(todo.category || 'Personnel');
   };
 
   const handlePriorityChange = (priority) => {
     if (changePriority) {
       changePriority(todo.id, priority);
+    }
+  };
+
+  const handleCategoryChange = (e) => {
+    if (changeCategory) {
+      changeCategory(todo.id, e.target.value);
     }
   };
 
@@ -70,6 +79,15 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo, changePriority }
             <option value="normale">Normale</option>
             <option value="haute">Haute</option>
           </select>
+          <select 
+            value={editCategory} 
+            onChange={(e) => setEditCategory(e.target.value)}
+            className="category-select"
+          >
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
+          </select>
           <div className="edit-actions">
             <button onClick={handleSave} className="save-btn">
               <FaCheck />
@@ -93,33 +111,48 @@ function TodoItem({ todo, toggleComplete, deleteTodo, editTodo, changePriority }
               <div className={`todo-priority ${getPriorityColor(todo.priority)}`}>
                 {todo.priority || 'normale'}
               </div>
+              <div className="todo-category">
+                <FaTag /> {todo.category || 'Personnel'}
+              </div>
             </div>
           </div>
           <div className="todo-actions">
             {!todo.completed && (
-              <div className="priority-actions">
-                <button 
-                  onClick={() => handlePriorityChange('basse')} 
-                  className={`priority-btn ${todo.priority === 'basse' ? 'active' : ''}`}
-                  title="Priorité basse"
+              <>
+                <div className="priority-actions">
+                  <button 
+                    onClick={() => handlePriorityChange('basse')} 
+                    className={`priority-btn ${todo.priority === 'basse' ? 'active' : ''}`}
+                    title="Priorité basse"
+                  >
+                    <FaFlag className="priority-icon priority-low" />
+                  </button>
+                  <button 
+                    onClick={() => handlePriorityChange('normale')} 
+                    className={`priority-btn ${todo.priority === 'normale' || !todo.priority ? 'active' : ''}`}
+                    title="Priorité normale"
+                  >
+                    <FaFlag className="priority-icon priority-normal" />
+                  </button>
+                  <button 
+                    onClick={() => handlePriorityChange('haute')} 
+                    className={`priority-btn ${todo.priority === 'haute' ? 'active' : ''}`}
+                    title="Priorité haute"
+                  >
+                    <FaFlag className="priority-icon priority-high" />
+                  </button>
+                </div>
+                <select 
+                  value={todo.category || 'Personnel'} 
+                  onChange={handleCategoryChange}
+                  className="quick-category-select"
+                  title="Changer de catégorie"
                 >
-                  <FaFlag className="priority-icon priority-low" />
-                </button>
-                <button 
-                  onClick={() => handlePriorityChange('normale')} 
-                  className={`priority-btn ${todo.priority === 'normale' || !todo.priority ? 'active' : ''}`}
-                  title="Priorité normale"
-                >
-                  <FaFlag className="priority-icon priority-normal" />
-                </button>
-                <button 
-                  onClick={() => handlePriorityChange('haute')} 
-                  className={`priority-btn ${todo.priority === 'haute' ? 'active' : ''}`}
-                  title="Priorité haute"
-                >
-                  <FaFlag className="priority-icon priority-high" />
-                </button>
-              </div>
+                  {categories.map(cat => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </>
             )}
             <button onClick={handleEdit} className="edit-btn" disabled={todo.completed}>
               <FaEdit />

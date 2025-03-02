@@ -2,7 +2,7 @@ import React from 'react';
 import TodoItem from './TodoItem';
 import './TodoList.css';
 
-function TodoList({ todos, toggleComplete, deleteTodo, editTodo }) {
+function TodoList({ todos, toggleComplete, deleteTodo, editTodo, changePriority, changeCategory, categories }) {
   if (todos.length === 0) {
     return <div className="empty-list">Aucune tâche à afficher</div>;
   }
@@ -16,6 +16,9 @@ function TodoList({ todos, toggleComplete, deleteTodo, editTodo }) {
           toggleComplete={toggleComplete}
           deleteTodo={deleteTodo}
           editTodo={editTodo}
+          changePriority={changePriority}
+          changeCategory={changeCategory}
+          categories={categories}
         />
       ))}
     </div>

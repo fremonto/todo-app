@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import './TodoForm.css';
 
-function TodoForm({ addTodo }) {
+function TodoForm({ addTodo, categories }) {
   const [input, setInput] = useState('');
   const [priority, setPriority] = useState('normale');
+  const [category, setCategory] = useState('Personnel');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTodo(input, priority);
+    addTodo(input, priority, category);
     setInput('');
     setPriority('normale');
+    setCategory('Personnel');
   };
 
   return (
@@ -29,6 +31,15 @@ function TodoForm({ addTodo }) {
         <option value="basse">Priorité basse</option>
         <option value="normale">Priorité normale</option>
         <option value="haute">Priorité haute</option>
+      </select>
+      <select 
+        value={category} 
+        onChange={(e) => setCategory(e.target.value)}
+        className="category-select"
+      >
+        {categories.map(cat => (
+          <option key={cat} value={cat}>{cat}</option>
+        ))}
       </select>
       <button type="submit" className="todo-button">
         Ajouter
