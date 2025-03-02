@@ -12,6 +12,15 @@
   font-size: 1rem;
 }
 
+.priority-select {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: white;
+  min-width: 140px;
+}
+
 .todo-button {
   padding: 0.8rem 1.5rem;
   background-color: #4caf50;
@@ -25,4 +34,14 @@
 
 .todo-button:hover {
   background-color: #388e3c;
+}
+
+@media (max-width: 640px) {
+  .todo-form {
+    flex-direction: column;
+  }
+  
+  .priority-select {
+    width: 100%;
+  }
 }
