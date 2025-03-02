@@ -19,13 +19,14 @@ function App() {
   }, [todos]);
 
   // Ajouter une nouvelle tâche
-  const addTodo = (text) => {
+  const addTodo = (text, priority = 'normale') => {
     if (text.trim() === '') return;
     const newTodo = {
       id: Date.now(),
       text,
       completed: false,
       createdAt: new Date().toISOString(),
+      priority
     };
     setTodos([newTodo, ...todos]);
   };
@@ -45,11 +46,20 @@ function App() {
   };
 
   // Modifier une tâche
-  const editTodo = (id, newText) => {
+  const editTodo = (id, newText, newPriority) => {
     if (newText.trim() === '') return;
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, text: newText } : todo
+        todo.id === id ? { ...todo, text: newText, priority: newPriority } : todo
+      )
+    );
+  };
+
+  // Changer la priorité d'une tâche
+  const changePriority = (id, priority) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, priority } : todo
       )
     );
   };
@@ -71,6 +81,9 @@ function App() {
     total: todos.length,
     active: todos.filter((todo) => !todo.completed).length,
     completed: todos.filter((todo) => todo.completed).length,
+    high: todos.filter((todo) => todo.priority === 'haute').length,
+    medium: todos.filter((todo) => todo.priority === 'normale').length,
+    low: todos.filter((todo) => todo.priority === 'basse').length
   };
 
   return (
@@ -116,6 +129,7 @@ function App() {
         toggleComplete={toggleComplete}
         deleteTodo={deleteTodo}
         editTodo={editTodo}
+        changePriority={changePriority}
       />
     </div>
   );
